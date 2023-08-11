@@ -1,0 +1,65 @@
+block variables
+doctype html
+html
+  block head
+    meta(charset="utf-8")
+    link(rel="shortcut icon", href="/public/beta.ico")
+    meta(name="viewport", content="width=device-width, initial-scale=1, shrink-to-fit=no")
+    meta(name="theme-color", content="#000000")
+    title #{title}
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  
+    body
+        div.container
+            h3 Melden sie sich mit ihrem Beta42 Account an
+            form(action='/cloud/login' method='POST')
+                .form-group
+                    label User/Mail
+                    input#username.form-control(type='text' name='username')
+                .form-group
+                    label Passwort
+                    input#password.form-control(type='password' name='password')
+                .modal-footer
+                    button.btn.btn-primary(type='submit') Anmelden
+                    a(style="text-decoration: none;" data-toggle='modal' data-target='#exampleModal').btn.btn-primary Account erstellen 
+                    a(style="text-decoration: none;" data-toggle='modal' data-target='#codeModal').btn.btn-primary Account verifizieren 
+        #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+            .modal-dialog(style='background-color: white' role='document')
+                .modal-content
+                    .modal-header
+                        h5#exampleModalLabel.modal-title Account in der Beta42 Cloud erstellen || Nach der Registrierung müssen sie vor dem login ihren per mail zugesendeten code verfizieren
+                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                    .modal-body
+                        form(action='/cloud/register' method='POST')
+                            .form-group
+                                label Email Addresse
+                                input#username.form-control(type='text' name='username')
+                            .form-group
+                                label Passwort
+                                input#ble_mac.form-control(type='password' name='password')
+                            .modal-footer
+                                button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+                                button.btn.btn-primary(type='submit') Regristieren
+        #codeModal.modal.fade(tabindex='-1' aria-labelledby='codeModalLabel' aria-hidden='true')
+            .modal-dialog(style='background-color: white' role='document')
+                .modal-content
+                    .modal-header
+                        h5#exampleModalLabel.modal-title Geben sie hier ihren Code ein den sie per Mail erhalten haben
+                        button.close(type='button' data-dismiss='modal' aria-label='Close')
+                        span(aria-hidden='true') &times;
+                    .modal-body
+                        form(action='/cloud/codeconfirm' method='POST')
+                            .form-group
+                                label Code
+                                input#code.form-control(type='text' name='code')
+                            .modal-footer
+                                button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+                                button.btn.btn-primary(type='submit') Verifizieren
+block append head 
+    <script src="/public/index.js" crossorigin="anonymous"></script>
+    <script src="/public/js/ff7e13a967.js" crossorigin="anonymous"></script>
+    <script src="/public/js/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="/public/js/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="/public/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="/public/socket.io.js"></script>

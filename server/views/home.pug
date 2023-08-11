@@ -1,0 +1,15 @@
+extends layout
+
+block append head 
+    script(src='/public/home.js')
+    <link rel="stylesheet" href="/public/css/custom-home.css">
+
+block  layout-content
+        div.container
+            div#users_where.row.row-cols-1.row-cols-md-3
+                - for(var x = 0; x < nutzer.length; x++)
+                    div.card-mb-4
+                        div.card
+                            div.card-body
+                                h3.card-title.text-center #{nutzer[x].name}
+                                p(id=nutzer[x].name).card-text

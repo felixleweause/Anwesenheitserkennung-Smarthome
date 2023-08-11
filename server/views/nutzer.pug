@@ -1,0 +1,58 @@
+extends layout
+
+block append head 
+    <link rel="stylesheet" href="/public/css/custom-nutzer.css">
+block layout-content
+    div.container
+        div.row.row-cols-1.row-cols-md-3
+            - for(var x = 0; x < nutzer.length; x++)
+                div.card-mb-4
+                    div.card
+                        a(style="color:black;text-decoration: none;" data-toggle='modal' data-target='#changeModal' data-esp_id=nutzer[x].deviceid data-name=nutzer[x].name data-id=nutzer[x].id).change_room
+                            div.card-body
+                                h3.card-title.text-center #{nutzer[x].name}
+                                p.card-text Device id: #{nutzer[x].deviceid}
+            div.card-mb-4
+                div.card 
+                    div.card-body 
+                        a(data-toggle='modal' data-target='#exampleModal').btn.btn-primary.btn-lg.active   Person Hinzufügen
+                            
+    #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+        .modal-dialog(style='background-color: white' role='document')
+            .modal-content
+                .modal-header
+                    h5#exampleModalLabel.modal-title Person Hinzufügen
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+                .modal-body
+                    form(action='/personen/add' method='POST')
+                        .form-group
+                            label Person
+                            input#person_name.form-control(type='text' name='person_name')
+                        .form-group
+                            label Person Deviceid
+                            //select.form-control.form-select-sm#ble_mac(name='ble_mac')
+                                option(value="" selected) Keine geräte gefunden
+                            //button.btn.btn-primary(type='button' onclick="user_scan()") Person suchen
+                            input#person_name.form-control(type='text' name='deviceid')
+                        .modal-footer
+                            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+                            button.btn.btn-primary(type='submit') Hinzufügen
+
+    #changeModal.modal.fade(tabindex='-1' aria-labelledby='changeModalLabel' aria-hidden='true')
+        .modal-dialog(style='background-color: white' role='document')
+            .modal-content
+                .modal-header
+                    h5#chnageModalLabel.modal-title Raum Bearbeiten
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+                .modal-body
+                    form(action='/personen/change' method='POST')
+                        .form-group
+                            label Geräte MAC
+                            input#raum_id.form-control(type='text' name='deviceid')
+                        input#id.form-control(type='text' name='id' style="display:none;")
+                        .modal-footer
+                            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+                            button.btn.btn-primary(type='submit') Ändern
+                            a.btn.btn-primary#delete_person(href="") Löschen

@@ -1,0 +1,15 @@
+extends layout
+
+block append head 
+    script(src='/public/hue.js')
+block layout-content
+    div.container 
+        h3#searchip Suche nach Philips hue Bridge..... dies kann eine weile dauern
+        form#ip__(action='/hue/connecthue' method='POST' style="display:none")
+            .form-group
+                label  Philips Hue Bridge
+                select.form-control.form-select-sm#ip(name='ip')
+                    option(value="" selected) Bridge Wählen
+            .modal-footer
+                label Bitte drücken sie den Link knopf auf ihrer Bridge bevor sie verbinden drücken!
+                button.btn.btn-primary(type='submit') Verbinden

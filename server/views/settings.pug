@@ -1,0 +1,36 @@
+extends layout
+
+
+block layout-content
+    div.container
+        div.row.row-cols-1.row-cols-md-3
+            div.card-mb-4
+                div.card
+                    div.card-body
+                        h3 Bridge 
+                        p Version: #{version}
+                        //div.custom-control.custom-switch
+                            form(action='/update/' method='POST')  
+                                if auto_update == true 
+                                    input#customSwitch1.custom-control-input(type='checkbox' checked onchange="show_safe_software()") 
+                                else 
+                                    input#customSwitch1.custom-control-input(type='checkbox' onchange="show_safe_software()") 
+                                label.custom-control-label(for='customSwitch1') Auto update 
+
+                                button.btn.btn-primary#save_button_software(type='submit' style='display: none') Save
+                        a.btn.btn-primary(href="/update") Update
+            div.card-mb-4
+                div.card
+                    div.card-body
+                        h3 Scanner 
+                        a.btn.btn-primary(href="/updateallscanner") Update alle
+            div.card-mb-4
+                div.card
+                    div.card-body
+                        h3 Erkennung  
+                        a.btn.btn-primary(href="/settings/resetki") Daten zurück setzen
+            div.card-mb-4
+                div.card
+                    div.card-body
+                        h3 Zugangsdaten  
+                        a.btn.btn-primary(href="/settings/resetuser") Zugangsdaten zurück setzen

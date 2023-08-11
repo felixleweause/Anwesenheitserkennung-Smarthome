@@ -1,0 +1,14 @@
+extends layout
+
+
+block layout-content
+    .row.justify-content-md-center(style='margin-top: 100px')
+    .col-md-6.container
+        form(method='POST' action='/login')
+            .form-group
+                label(for='') Benutzername
+                input#exampleInputEmail1.form-control(name='user' type='text' placeholder='Benutzername')
+            .form-group
+                label(for='exampleInputPassword1') Password
+                input#exampleInputPassword1.form-control(name='password' type='password' placeholder='Password')
+            button.btn.btn-primary(type='submit') Login

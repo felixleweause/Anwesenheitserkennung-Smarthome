@@ -1,0 +1,97 @@
+extends layout
+block append head 
+    <link rel="stylesheet" href="/public/css/custom-rooms.css">
+
+block layout-content
+    div.container
+        div.row.row-cols-1.row-cols-md-3
+            - for(var x = 0; x < rooms.length; x++)
+                div.card-mb-4
+                    div.card
+                        a(style="color:black;text-decoration: none;" data-toggle='modal' data-target='#changeModal' data-esp_id=rooms[x].esp_id data-name=rooms[x].name data-id=rooms[x].id).change_room
+                            div.card-body
+                                h3.card-title.text-center #{rooms[x].name}
+                                p.card-text Gerät ID: #{rooms[x].esp_id}
+                                p Version: #{rooms[x].version}
+                                if rooms[x].status == "ready"
+                                    p Online
+                                else if rooms[x].status == "online"
+                                    if rooms[x].version == 0
+                                        p Gerät muss geupdatet werden
+                                    else 
+                                        p Online , Funktion eingeschränkt
+                                else if rooms[x].status == "update"
+                                    p Updating... das kann max 10 min dauern
+                                else
+                                    p Offline
+                        form(action='/updatescanner/' method='POST')  
+                            input#raum_id.form-control(type='text' name='id' style="display:none;" value=rooms[x].esp_id)
+                            button.btn.btn-primary(type='submit') Update
+                        
+            div.card-mb-4
+                div.card 
+                    div.card-body 
+                        a(data-toggle='modal' data-target='#exampleModal').btn.btn-primary.btn-lg.active Raum Hinzufügen
+                        a(data-toggle='modal' data-target='#trainModal').btn.btn-primary.btn-lg.active Trainieren
+                            
+    #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+        .modal-dialog(style='background-color: white' role='document')
+            .modal-content
+                .modal-header
+                    h5#exampleModalLabel.modal-title Raum Hinzufügen
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+                .modal-body
+                    form(action='/raeume/add' method='POST')
+                        .form-group
+                            label Raum
+                            input#raum_name.form-control(type='text' name='raum_name')
+                        .form-group
+                            label Raum ID
+                            input#raum_id.form-control(type='text' name='raum_id')
+                        .modal-footer
+                            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+                            button.btn.btn-primary(type='submit') Hinzufügen
+
+    #changeModal.modal.fade(tabindex='-1' aria-labelledby='changeModalLabel' aria-hidden='true')
+        .modal-dialog(style='background-color: white' role='document')
+            .modal-content
+                .modal-header
+                    h5#chnageModalLabel.modal-title Raum Bearbeiten
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+                .modal-body
+                    form(action='/raeume/change' method='POST')
+                        .form-group
+                            label Raum ID
+                            input#raum_id.form-control(type='text' name='raum_id')
+                            input#id.form-control(type='text' name='id' style="display:none;")
+                        .modal-footer
+                            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+                            button.btn.btn-primary(type='submit') Ändern
+                            a.btn.btn-primary#delete_room(href="") Löschen
+
+    #trainModal.modal.fade(tabindex='-1' aria-labelledby='trainModalLabel' aria-hidden='true')
+        .modal-dialog(style='background-color: white' role='document')
+            .modal-content
+                .modal-header
+                    h5#trainModalLabel.modal-title Trainieren
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+                .modal-body
+                    select.form-control.form-select-sm#mac(name='mac')
+                        option(value="" selected) Person Wählen
+                        - for(var x = 0; x < nutzer.length; x++)
+                            option(value=nutzer[x].name) #{nutzer[x].name}
+                    
+                    table.table
+                        tbody
+                            - for(var x = 0; x < rooms.length; x++)
+                                tr
+                                    td #{rooms[x].name}
+                                    td 
+                                        button.btn.btn-primary(id="id" + rooms[x].esp_id onclick="learning('" + rooms[x].esp_id + "')") Daten sammeln
+
+                .modal-footer
+                    button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+                    a.btn.btn-primary(href="/train") Trainieren

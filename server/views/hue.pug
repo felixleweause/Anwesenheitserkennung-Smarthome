@@ -1,0 +1,81 @@
+extends layout
+
+block append head 
+    script. 
+        var x = "#{ JSON.stringify(scenes) }"
+        var scene = JSON.parse(x.replace(/&quot;/g,'"'));
+    script(src='/public/hue.js')
+block layout-content
+    div.container
+        p(style="align:left") Mit Hue Bridge #{ip} 
+            - for(var x = 0; x < rules.length; x++)
+                div.card-mb-4
+                    div.card
+                        a(style="color:black;text-decoration: none;" data-toggle='modal' data-target='#changeModal' ).change_room
+                            div.card-body
+                                h3.card-title.text-center #{rules[x].name}
+                                p.card-text Raum: #{rules[x].raum}
+                                p.card-text Person: #{rules[x].person}
+            div.card-mb-4
+                div.card 
+                    div.card-body 
+                        a(data-toggle='modal' data-target='#exampleModal').btn.btn-primary.active   Regel Hinzufügen
+                        a(href='/hue/reloadconf').btn.btn-primary.active   Szene/Gruppen neu laden
+    #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+        .modal-dialog(style='background-color: white' role='document')
+            .modal-content
+                .modal-header
+                    h5#exampleModalLabel.modal-title Regel Hinzufügen
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+                .modal-body
+                    form(action='/hue/addrule' method='POST')
+                        .form-group
+                            label Raum
+                            select.form-control.form-select-sm#raum(name='raum')
+                                option(value="" selected) Raum Wählen
+                                    - for(var x = 0; x < rooms.length; x++)
+                                        option(value=rooms[x].name) #{rooms[x].name}
+                        .form-group
+                            label Person
+                            select.form-control.form-select-sm#person(name='person')
+                                option(value="" selected) Person Wählen
+                                    - for(var x = 0; x < person.length; x++)
+                                        option(value=person[x].name) #{person[x].name}
+                        .form-group
+                            label Ereigniss 
+                            select.form-control.form-select-sm#action(name='action')
+                                option(value="" selected) Ereignis  Wählen
+                                option(value="true") Betreten
+                                option(value="false") Verlassen
+
+                        .form-group
+                            label Hue Gruppe
+                            select.form-control.form-select-sm#gruppe(name='gruppe' onchange="changegroup();")
+                                option(value="" selected) Hue Gruppe Wählen
+                                    - for(var x = 0; x < groups.length; x++)
+                                        option(value=groups[x].id) #{groups[x].name}
+                        .form-group
+                            label Szene
+                            select.form-control.form-select-sm#scene(name='scene')
+                                option(value="" selected) Hue Szene Wählen
+                                option(value="false") Aus
+                        .modal-footer
+                            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+                            button.btn.btn-primary(type='submit') Hinzufügen
+    #changeModal.modal.fade(tabindex='-1' aria-labelledby='changeModalLabel' aria-hidden='true')
+        .modal-dialog(style='background-color: white' role='document')
+            .modal-content
+                .modal-header
+                    h5#chnageModalLabel.modal-title Raum Bearbeiten
+                    button.close(type='button' data-dismiss='modal' aria-label='Close')
+                    span(aria-hidden='true') &times;
+                .modal-body
+                    form(action='/personen/change' method='POST')
+                        .form-group
+                            label Geräte MAC
+                            input#raum_id.form-control(type='text' name='device')
+                        input#id.form-control(type='text' name='id' style="display:none;")
+                        .modal-footer
+                            button.btn.btn-secondary(type='button' data-dismiss='modal') Close
+                            button.btn.btn-primary(type='submit') Ändern

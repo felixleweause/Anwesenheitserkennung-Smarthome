@@ -1,0 +1,9 @@
+extends layout
+
+
+block layout-content
+    div.container
+        h2(tsyle='text-align:center') Das system wird neugestartet, dies kann bis zu 2 min dauern danach könen sie auf "home" drücken 
+        div.d-flex.align-items-center.justify-content-center()
+            div.spinner-border(role='status')
+                span.sr-only Loading...
